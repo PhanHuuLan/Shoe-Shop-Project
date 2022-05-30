@@ -3,7 +3,7 @@ import asyncHandler from "express-async-handler";
 import { protect, admin } from "../Middleware/AuthMiddleware.js";
 import generateToken from "../utils/generateToken.js";
 import User from "./../Models/UserModel.js";
-
+import bcrypt from "bcryptjs";
 const userRouter = express.Router();
 
 // LOGIN
@@ -12,7 +12,7 @@ userRouter.post(
   asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-
+    console.log(bcrypt.hashSync(password));
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
